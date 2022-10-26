@@ -4,11 +4,11 @@ export default function OffersTable(props) {
     function getOffers() {
         let rows = [];
         for (let i = 0; i < offers.length; i++) {
-            rows.push(<tr>
-                <td className='border border-slate-300 p-6'>{offers[0][1]}</td>
-                <td className='border border-slate-300 p-6'>{offers[0][0]}</td>
-                <td className='border border-slate-300 p-6'>{offers[0][3]}</td>
-                <td className='border border-slate-300 p-6'>{offers[0][2]}</td>
+            rows.push(<tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                <td className='py-4 px-6'>{offers[0][1]}</td>
+                <td className='py-4 px-6'>{offers[0][0]}</td>
+                <td className='py-4 px-6'>{offers[0][3]}</td>
+                <td className='py-4 px-6'>{offers[0][2]}</td>
             </tr>)
         }
         return <>
@@ -16,19 +16,21 @@ export default function OffersTable(props) {
         </>;
     }
     return (
-        <table className='table-auto border-collapse border border-slate-400'>
-            <thead>
-                <tr>
-                    <th className='border border-slate-300 p-6'>Buy</th>
-                    <th className='border border-slate-300 p-6'>Price</th>
-                    <th className='border border-slate-300 p-6'>Sell</th>
-                    <th className='border border-slate-300 p-6'>Price</th>
-                </tr>
-            </thead>
-            <tbody>
-                {getOffers()}
+        <div class="overflow-x-auto relative">
+            <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
+                <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                        <th scope="col" className='py-3 px-6'>Buy</th>
+                        <th scope="col" className='py-3 px-6'>Price</th>
+                        <th scope="col" className='py-3 px-6'>Sell</th>
+                        <th scope="col" className='py-3 px-6'>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {getOffers()}
 
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
     )
 }
