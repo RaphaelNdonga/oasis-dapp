@@ -1,20 +1,5 @@
-export default function OffersTable(props) {
-    const offers = props.offers;
-
-    function getOffers() {
-        let rows = [];
-        for (let i = 0; i < offers.length; i++) {
-            rows.push(<tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                <td className='py-4 px-6'>{offers[0][1]}</td>
-                <td className='py-4 px-6'>{offers[0][0]}</td>
-                <td className='py-4 px-6'>{offers[0][3]}</td>
-                <td className='py-4 px-6'>{offers[0][2]}</td>
-            </tr>)
-        }
-        return <>
-            {[...rows]}
-        </>;
-    }
+import React from "react";
+export default function OffersTable({ offers }) {
     return (
         <div class="overflow-x-auto relative">
             <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
@@ -27,7 +12,17 @@ export default function OffersTable(props) {
                     </tr>
                 </thead>
                 <tbody>
-                    {getOffers()}
+                    {offers ? offers.map(offer => <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <td className='py-4 px-6'>{offer[1]}</td>
+                        <td className='py-4 px-6'>{offer[0]}</td>
+                        <td className='py-4 px-6'>{offer[3]}</td>
+                        <td className='py-4 px-6'>{offer[2]}</td>
+                    </tr>) : <tr>
+                        <td>...</td>
+                        <td>...</td>
+                        <td>...</td>
+                        <td>...</td>
+                    </tr>}
 
                 </tbody>
             </table>

@@ -5,7 +5,8 @@ import Web3 from 'web3'
 import { useEffect, useState } from 'react'
 import OasisAddress from "./blockchain/OasisAddress.json";
 import OasisABI from "./blockchain/OasisABI.json";
-import OffersTable from './components/OffersTable'
+import OffersTable from './components/OffersTable';
+import React from 'react';
 
 export default function Home() {
 
