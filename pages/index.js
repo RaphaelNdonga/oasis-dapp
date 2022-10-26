@@ -3,8 +3,8 @@ import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import Web3 from 'web3'
 import { useEffect, useState } from 'react'
-import OasisAddress from "./blockchain/OasisAddress.json";
-import OasisABI from "./blockchain/OasisABI.json";
+import OasisAddress from "./blockchain/OasisGoerliAddress.json";
+import OasisABI from "./blockchain/OasisGoerliABI.json";
 import OffersTable from './components/OffersTable';
 import React from 'react';
 
@@ -14,7 +14,7 @@ export default function Home() {
   const [signer, setSigner] = useState(null);
   const [web3, setWeb3] = useState(null);
   const [oasisContract, setOasisContract] = useState(null);
-  const [offers, setOffers] = useState(null);
+  const [offers, setOffers] = useState([]);
 
   async function connectMetamask() {
     if (window.ethereum) {
@@ -42,19 +42,21 @@ export default function Home() {
       const _oasisContract = new _web3.eth.Contract(OasisABI, OasisAddress);
       setOasisContract(_oasisContract);
       const _lastOfferId = await _oasisContract.methods.last_offer_id().call();
-      console.log(_lastOfferId);
+      console.log("last_offer_id: ", _lastOfferId);
       getOffers(_oasisContract, _lastOfferId)
     }
   }
 
   async function getOffers(oasisContract, lastOfferId) {
-    const offersArray = []
     for (let i = 1; i <= lastOfferId; i++) {
       const currentOffer = await oasisContract.methods.getOffer(i).call();
-      console.log(currentOffer);
-      offersArray.push(currentOffer);
+
+      if (currentOffer[0] != 0) {
+        console.log(currentOffer);
+        setOffers(prevOffers => [...prevOffers, currentOffer])
+      }
+
     }
-    setOffers(offersArray);
   }
 
   useEffect(() => {
