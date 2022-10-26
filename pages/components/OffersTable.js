@@ -1,7 +1,7 @@
 import React from "react";
 export default function OffersTable({ offers }) {
     return (
-        <div class="overflow-x-auto relative">
+        <div className="overflow-x-auto relative">
             <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
@@ -12,7 +12,7 @@ export default function OffersTable({ offers }) {
                     </tr>
                 </thead>
                 <tbody>
-                    {offers ? offers.map(offer => <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                    {offers ? offers.map(offer => <tr key={offers.indexOf(offer)} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                         <td className='py-4 px-6'>{offer[1]}</td>
                         <td className='py-4 px-6'>{offer[0]}</td>
                         <td className='py-4 px-6'>{offer[3]}</td>
