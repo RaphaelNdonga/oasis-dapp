@@ -5,6 +5,7 @@ import Web3 from 'web3'
 import { useEffect, useState } from 'react'
 import OasisAddress from "./blockchain/OasisAddress.json";
 import OasisABI from "./blockchain/OasisABI.json";
+import OffersTable from './components/OffersTable'
 
 export default function Home() {
 
@@ -12,6 +13,7 @@ export default function Home() {
   const [signer, setSigner] = useState(null);
   const [web3, setWeb3] = useState(null);
   const [oasisContract, setOasisContract] = useState(null);
+  const [offers, setOffers] = useState(null);
 
   async function connectMetamask() {
     if (window.ethereum) {
@@ -38,9 +40,20 @@ export default function Home() {
       setWeb3(_web3);
       const _oasisContract = new _web3.eth.Contract(OasisABI, OasisAddress);
       setOasisContract(_oasisContract);
-      const lastOfferId = await _oasisContract.methods.last_offer_id().call();
-      console.log(lastOfferId);
+      const _lastOfferId = await _oasisContract.methods.last_offer_id().call();
+      console.log(_lastOfferId);
+      getOffers(_oasisContract, _lastOfferId)
     }
+  }
+
+  async function getOffers(oasisContract, lastOfferId) {
+    const offersArray = []
+    for (let i = 1; i <= lastOfferId; i++) {
+      const currentOffer = await oasisContract.methods.getOffer(i).call();
+      console.log(currentOffer);
+      offersArray.push(currentOffer);
+    }
+    setOffers(offersArray);
   }
 
   useEffect(() => {
@@ -60,7 +73,7 @@ export default function Home() {
         <span className='font-semibold text-xl tracking-tight'>
           OASIS DEX PLAYGROUND
         </span>
-        {!connected ? <a href="#" onClick={connectMetamask} class="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0">Connect Wallet</a> : <a href="#" class="inline-block text-sm px-4 py-2 border-transparent text-teal-500 bg-white mt-4 lg:mt-0">Connected</a>
+        {!connected ? <a href="#" onClick={connectMetamask} className="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0">Connect Wallet</a> : <a href="#" className="inline-block text-sm px-4 py-2 border-transparent text-teal-500 bg-white mt-4 lg:mt-0">Connected</a>
         }
 
       </nav>
@@ -72,25 +85,7 @@ export default function Home() {
             </h1>
           </div>
           <div className='flex item-center justify-center p-6 pt-0'>
-            <table className='table-auto border-collapse border border-slate-400'>
-              <thead>
-                <tr>
-                  <th className='border border-slate-300 p-6'>Buy</th>
-                  <th className='border border-slate-300 p-6'>Price</th>
-                  <th className='border border-slate-300 p-6'>Sell</th>
-                  <th className='border border-slate-300 p-6'>Price</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td className='border border-slate-300 p-6'>x</td>
-                  <td className='border border-slate-300 p-6'>10</td>
-                  <td className='border border-slate-300 p-6'>y</td>
-                  <td className='border border-slate-300 p-6'>10</td>
-                </tr>
-
-              </tbody>
-            </table>
+            <OffersTable offers={offers} />
           </div>
         </div>
       </main>
