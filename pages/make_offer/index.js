@@ -4,6 +4,7 @@ import OasisAddress from "../blockchain/OasisGoerliAddress.json";
 import OasisABI from "../blockchain/OasisGoerliABI.json";
 import { ethers } from "ethers";
 import ERC20ABI from "../blockchain/ERC20ABI.json";
+import Link from "next/link";
 
 export default function Make_Offer() {
     const [buyingAddress, setBuyingAddress] = useState("");
@@ -70,9 +71,9 @@ export default function Make_Offer() {
         <>
             <nav className='flex item-center justify-between flex-wrap bg-teal-500 text-white p-6'>
                 <div className="flex items-center flex-shrink-0 text-white mr-6">
-                    <a ref={homeRef} href="/" className='font-semibold text-xl tracking-tight'>
-                        OASIS DEX PLAYGROUND
-                    </a>
+                    <Link ref={homeRef} href="/">
+                        <p className='font-semibold text-xl tracking-tight'>OASIS DEX PLAYGROUND</p>
+                    </Link>
                 </div>
                 <div className="block lg:hidden">
                     <button className="flex items-center px-3 py-2 border rounded text-teal-200 border-teal-400 hover:text-white hover:border-white">
