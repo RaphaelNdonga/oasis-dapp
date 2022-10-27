@@ -72,7 +72,7 @@ export default function Make_Offer() {
             <nav className='flex item-center justify-between flex-wrap bg-teal-500 text-white p-6'>
                 <div className="flex items-center flex-shrink-0 text-white mr-6">
                     <Link ref={homeRef} href="/">
-                        <p className='font-semibold text-xl tracking-tight'>OASIS DEX PLAYGROUND</p>
+                        <a className='font-semibold text-xl tracking-tight'>OASIS DEX PLAYGROUND</a>
                     </Link>
                 </div>
                 <div className="block lg:hidden">
