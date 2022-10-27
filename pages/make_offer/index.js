@@ -3,17 +3,22 @@ import Web3 from "web3";
 import OasisAddress from "../blockchain/OasisGoerliAddress.json";
 import OasisABI from "../blockchain/OasisGoerliABI.json";
 import { ethers } from "ethers";
+import ERC20ABI from "../blockchain/ERC20ABI.json";
 
 export default function Make_Offer() {
     const [buyingAddress, setBuyingAddress] = useState("");
     const [sellingAddress, setSellingAddress] = useState("");
     const [buyingPrice, setBuyingPrice] = useState("");
     const [sellingPrice, setSellingPrice] = useState("");
+    const [web3, setWeb3] = useState(null);
     const [oasisContract, setOasisContract] = useState(null);
 
+
+
     useEffect(() => {
-        const web3 = new Web3(window.ethereum);
-        const oContract = new web3.eth.Contract(OasisABI, OasisAddress);
+        const _web3 = new Web3(window.ethereum);
+        setWeb3(_web3);
+        const oContract = new _web3.eth.Contract(OasisABI, OasisAddress);
         setOasisContract(oContract);
     }, [])
 
@@ -23,10 +28,12 @@ export default function Make_Offer() {
             const _buyingPrice = ethers.utils.parseEther("0.001");
             const _sellingAddress = "0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6"
             const _buyingAddress = "0x11fE4B6AE13d2a6055C8D9cF65c55bac32B5d844"
+            await approve(_sellingAddress, _sellingPrice);
+            await approve(_buyingAddress, _buyingPrice);
             let last_offer_id = await oasisContract.methods.last_offer_id().call();
             last_offer_id = parseInt(last_offer_id);
             console.log(oasisContract);
-            await oasisContract.methods.offer(_sellingPrice, _sellingAddress, _buyingPrice, _buyingAddress, 3).send({
+            await oasisContract.methods.offer(_sellingPrice, _sellingAddress, _buyingPrice, _buyingAddress, 4).send({
                 from: localStorage.getItem("metamask")
             });
         } catch (error) {
@@ -34,6 +41,12 @@ export default function Make_Offer() {
         }
 
     }
+
+    async function approve(address, amount) {
+        const erc20Contract = new web3.eth.Contract(ERC20ABI, address);
+        await erc20Contract.methods.approve(OasisAddress, amount).send({ from: localStorage.getItem("metamask") });
+    }
+
     return (
         <>
             <nav className='flex item-center justify-between flex-wrap bg-teal-500 text-white p-6'>
