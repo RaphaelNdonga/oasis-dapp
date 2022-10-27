@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Web3 from "web3";
 import OasisAddress from "../blockchain/OasisGoerliAddress.json";
 import OasisABI from "../blockchain/OasisGoerliABI.json";
@@ -12,6 +12,7 @@ export default function Make_Offer() {
     const [sellingPrice, setSellingPrice] = useState("");
     const [web3, setWeb3] = useState(null);
     const [oasisContract, setOasisContract] = useState(null);
+    const homeRef = useRef(null);
 
 
 
@@ -20,7 +21,27 @@ export default function Make_Offer() {
         setWeb3(_web3);
         const oContract = new _web3.eth.Contract(OasisABI, OasisAddress);
         setOasisContract(oContract);
+
+        window.ethereum.on("accountsChanged", checkConnection);
+
+        return () => {
+            window.ethereum.removeListener("accountsChanged", checkConnection);
+        }
     }, [])
+
+    const checkConnection = async (accounts) => {
+        console.log('checking accounts...', accounts);
+        console.log(accounts[0])
+        if (accounts[0] === null || accounts[0] === "" || accounts[0] === undefined) {
+            localStorage.removeItem("metamask");
+            setWeb3(null);
+            homeRef.current.click();
+        } else {
+            localStorage.setItem("metamask", accounts[0]);
+            const _web3 = new Web3(window.ethereum);
+            setWeb3(_web3);
+        }
+    }
 
     const placeOffer = async () => {
         try {
@@ -49,9 +70,9 @@ export default function Make_Offer() {
         <>
             <nav className='flex item-center justify-between flex-wrap bg-teal-500 text-white p-6'>
                 <div className="flex items-center flex-shrink-0 text-white mr-6">
-                    <span className='font-semibold text-xl tracking-tight'>
+                    <a ref={homeRef} href="/" className='font-semibold text-xl tracking-tight'>
                         OASIS DEX PLAYGROUND
-                    </span>
+                    </a>
                 </div>
                 <div className="block lg:hidden">
                     <button className="flex items-center px-3 py-2 border rounded text-teal-200 border-teal-400 hover:text-white hover:border-white">
