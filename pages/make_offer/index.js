@@ -24,20 +24,18 @@ export default function Make_Offer() {
 
     const placeOffer = async () => {
         try {
-            const _sellingPrice = ethers.utils.parseEther("0.001");
-            const _buyingPrice = ethers.utils.parseEther("0.001");
-            const _sellingAddress = "0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6"
-            const _buyingAddress = "0x11fE4B6AE13d2a6055C8D9cF65c55bac32B5d844"
-            await approve(_sellingAddress, _sellingPrice);
-            await approve(_buyingAddress, _buyingPrice);
-            let last_offer_id = await oasisContract.methods.last_offer_id().call();
-            last_offer_id = parseInt(last_offer_id);
+            const _sellingPrice = ethers.utils.parseEther(sellingPrice);
+            const _buyingPrice = ethers.utils.parseEther(buyingPrice);
+            console.log(`Arguments: ${_sellingPrice} ${sellingAddress} ${_buyingPrice} ${buyingAddress}`);
+            await approve(sellingAddress, _sellingPrice);
+            await approve(buyingAddress, _buyingPrice);
             console.log(oasisContract);
-            await oasisContract.methods.offer(_sellingPrice, _sellingAddress, _buyingPrice, _buyingAddress, 4).send({
+            await oasisContract.methods.offer(_sellingPrice, sellingAddress, _buyingPrice, buyingAddress).send({
                 from: localStorage.getItem("metamask")
             });
         } catch (error) {
             alert("Error occurred: ", error);
+            console.log(`error: ${error}`);
         }
 
     }
@@ -67,7 +65,7 @@ export default function Make_Offer() {
                         <div className="md:flex md:items-center mb-6">
                             <div className="md:w-1/3">
                                 <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="inline-full-name">
-                                    Token Buying Address
+                                    Token Buying Address (DAI)
                                 </label>
                             </div>
                             <div className="md:w-2/3">
