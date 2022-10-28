@@ -64,6 +64,10 @@ export default function Home() {
     console.log("OFFERS: ", _offers);
   }
 
+  async function buy(id, amount) {
+    await oasisContract.methods.buy(id, amount).send({ from: signer });
+  }
+
   useEffect(() => {
     const account = localStorage.getItem("metamask");
     checkConnection([account]);
@@ -109,7 +113,7 @@ export default function Home() {
             </h1>
           </div>
           <div className='flex item-center justify-center p-6 pt-0'>
-            <OffersTable offers={offers} />
+            <OffersTable offers={offers} buy={buy} />
           </div>
         </div>
       </main>
