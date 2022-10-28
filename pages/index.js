@@ -108,8 +108,8 @@ export default function Home() {
       <main>
         <div>
           <div className='flex item-center justify-center p-6'>
-            <h1 className='underline decoration-double text-xl'>
-              OFFERS LIST
+            <h1 className='text-xl'>
+              OFFERS LIST (Click to purchase)
             </h1>
           </div>
           <div className='flex item-center justify-center p-6 pt-0'>
