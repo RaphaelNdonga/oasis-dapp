@@ -93,7 +93,7 @@ export default function Home() {
             </Link>}
           </div>
         </div>
-        {!connected ? <Link href="#" onClick={connectMetamask}><a className="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0">Connect Wallet</a></Link> : <Link href="#" ><a className="inline-block text-sm px-4 py-2 border-transparent text-teal-500 bg-white mt-4 lg:mt-0">Connected</a></Link>
+        {!connected ? <Link href="#" ><a onClick={connectMetamask} className="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0">Connect Wallet</a></Link> : <Link href="#" ><a className="inline-block text-sm px-4 py-2 border-transparent text-teal-500 bg-white mt-4 lg:mt-0">Connected</a></Link>
         }
 
       </nav>
