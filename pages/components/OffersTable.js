@@ -13,7 +13,7 @@ export default function OffersTable({ offers, buy }) {
                     </tr>
                 </thead>
                 <tbody>
-                    {offers ? offers.map(offer => <tr key={offers.indexOf(offer)} onClick={() => { buy(offers.indexOf(offer) + 1, ethers.utils.parseUnits(offer[0], "wei")) }} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 cursor-pointer">
+                    {offers ? offers.map(offer => <tr key={offers.indexOf(offer)} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                         <td className='py-4 px-6'>{offer[1]}</td>
                         <td className='py-4 px-6'>{ethers.utils.formatEther(offer[0])} ETH</td>
                         <td className='py-4 px-6'>{offer[3]}</td>
