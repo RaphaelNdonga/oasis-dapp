@@ -51,7 +51,6 @@ export default function Make_Offer() {
             const _buyingPrice = ethers.utils.parseEther(buyingPrice);
             console.log(`Arguments: ${_sellingPrice} ${sellingAddress} ${_buyingPrice} ${daiAddress}`);
             await approve(sellingAddress, _sellingPrice);
-            await approve(daiAddress, _buyingPrice);
             console.log(oasisContract);
             const position = await oasisContract.methods.last_offer_id().call();
             console.log("The position is: ", position);
