@@ -49,19 +49,15 @@ export default function Home() {
   }
 
   async function getOffers(oasisContract, lastOfferId) {
-    let _offers = [];
     for (let i = 1; i <= lastOfferId; i++) {
       let currentOffer = Object.values(await oasisContract.methods.getOffer(i).call());
+      console.log("Current offer: ", currentOffer);
 
       if (currentOffer[0] != 0) {
-        console.log(currentOffer);
-        console.log("Is present: ", _offers.includes(currentOffer));
-        _offers.push(currentOffer);
-        setOffers(_offers);
+        setOffers(prevOffers => [...prevOffers, currentOffer]);
       }
 
     }
-    console.log("OFFERS: ", _offers);
   }
 
   useEffect(() => {
