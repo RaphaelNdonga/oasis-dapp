@@ -11,6 +11,9 @@ export default function Get_Offer() {
     const homeRef = useRef(null);
     const [web3, setWeb3] = useState(null);
     const [oasisContract, setOasisContract] = useState(null);
+    const [buyingAmount, setBuyingAmount] = useState("");
+    const [daiAddress, setDaiAddress] = useState("0x11fE4B6AE13d2a6055C8D9cF65c55bac32B5d844");
+    const [wethAddress, setWethAddress] = useState("0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6");
 
     async function approve(address, amount) {
         const erc20Contract = new web3.eth.Contract(ERC20ABI, address);
@@ -20,17 +23,27 @@ export default function Get_Offer() {
 
     async function getBestOffer() {
         console.log("oasis contract: ", oasisContract);
-        const bestOfferId = await oasisContract.methods.getBestOffer("0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6", "0x11fE4B6AE13d2a6055C8D9cF65c55bac32B5d844").call();
+        const bestOfferId = await oasisContract.methods.getBestOffer(wethAddress, daiAddress).call();
         console.log("Best offer id: ", bestOfferId);
+
+        const offerCount = await oasisContract.methods.getOfferCount(wethAddress, daiAddress).call();
+        console.log("offer count: ", offerCount);
 
         const bestOffer = await oasisContract.methods.getOffer(bestOfferId).call();
         console.log("best offer: ", bestOffer);
+        const worseOfferId = await oasisContract.methods.getWorseOffer(bestOfferId).call();
+        const worseOffer = await oasisContract.methods.getOffer(worseOfferId).call();
+        console.log("worse offer: ", worseOffer);
 
-        await approve(bestOffer[1], bestOffer[0]);
-        await approve(bestOffer[3], bestOffer[2]);
+        const worserOfferId = await oasisContract.methods.getWorseOffer(worseOfferId).call();
+        const worserOffer = await oasisContract.methods.getOffer(worserOfferId).call();
+        console.log("worser offer: ", worserOffer);
 
-        await oasisContract.methods.buy(bestOfferId, ethers.utils.parseEther("0.01")).send({ from: localStorage.getItem("metamask") });
-        // await approve(OasisAddress,)
+
+        await approve(bestOffer[1], ethers.utils.parseUnits(bestOffer[0]));
+        await approve(bestOffer[3], ethers.utils.parseUnits(bestOffer[2]));
+
+        await oasisContract.methods.buy(bestOfferId, ethers.utils.parseEther(buyingAmount)).send({ from: localStorage.getItem("metamask") });
     }
 
     const checkConnection = async (accounts) => {
@@ -79,24 +92,12 @@ export default function Get_Offer() {
                     <div className="md:flex md:items-center mb-6">
                         <div className="md:w-1/3">
                             <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="inline-full-name">
-                                Token Buying Address (DAI)
+                                Dai to Spend
                             </label>
                         </div>
                         <div className="md:w-2/3">
-                            <input className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-full-name" type="text" placeholder="Enter address" onChange={(e) => {
-                                setBuyingAddress(e.target.value);
-                            }} />
-                        </div>
-                    </div>
-                    <div className="md:flex md:items-center mb-6">
-                        <div className="md:w-1/3">
-                            <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="inline-full-name">
-                                Token Selling Address
-                            </label>
-                        </div>
-                        <div className="md:w-2/3">
-                            <input className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-full-name" type="text" placeholder="Enter address" onChange={(e) => {
-                                setSellingAddress(e.target.value);
+                            <input className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-full-name" type="text" placeholder="Enter amount" onChange={(e) => {
+                                setBuyingAmount(e.target.value);
                             }} />
                         </div>
                     </div>

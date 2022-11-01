@@ -14,6 +14,9 @@ export default function Make_Offer() {
     const [web3, setWeb3] = useState(null);
     const [oasisContract, setOasisContract] = useState(null);
     const homeRef = useRef(null);
+    const [daiAddress, setDaiAddress] = useState("0x11fE4B6AE13d2a6055C8D9cF65c55bac32B5d844");
+    const [wethAddress, setWethAddress] = useState("0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6");
+
 
 
 
@@ -49,10 +52,10 @@ export default function Make_Offer() {
             const _sellingPrice = ethers.utils.parseEther(sellingPrice);
             const _buyingPrice = ethers.utils.parseEther(buyingPrice);
             console.log(`Arguments: ${_sellingPrice} ${sellingAddress} ${_buyingPrice} ${buyingAddress}`);
-            await approve(sellingAddress, _sellingPrice);
-            await approve(buyingAddress, _buyingPrice);
+            await approve(wethAddress, _sellingPrice);
+            await approve(daiAddress, _buyingPrice);
             console.log(oasisContract);
-            await oasisContract.methods.offer(_sellingPrice, sellingAddress, _buyingPrice, buyingAddress).send({
+            await oasisContract.methods.offer(_sellingPrice, wethAddress, _buyingPrice, daiAddress).send({
                 from: localStorage.getItem("metamask")
             });
         } catch (error) {
@@ -87,20 +90,7 @@ export default function Make_Offer() {
                         <div className="md:flex md:items-center mb-6">
                             <div className="md:w-1/3">
                                 <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="inline-full-name">
-                                    Token Buying Address (DAI)
-                                </label>
-                            </div>
-                            <div className="md:w-2/3">
-                                <input className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-full-name" type="text" placeholder="Enter address" onChange={(e) => {
-                                    setBuyingAddress(e.target.value);
-                                }} />
-                            </div>
-                        </div>
-
-                        <div className="md:flex md:items-center mb-6">
-                            <div className="md:w-1/3">
-                                <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="inline-full-name">
-                                    Token Buying Price
+                                    DAI Buying Price
                                 </label>
                             </div>
                             <div className="md:w-2/3">
@@ -112,19 +102,7 @@ export default function Make_Offer() {
                         <div className="md:flex md:items-center mb-6">
                             <div className="md:w-1/3">
                                 <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="inline-full-name">
-                                    Token Selling Address
-                                </label>
-                            </div>
-                            <div className="md:w-2/3">
-                                <input className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-full-name" type="text" placeholder="Enter address" onChange={(e) => {
-                                    setSellingAddress(e.target.value);
-                                }} />
-                            </div>
-                        </div>
-                        <div className="md:flex md:items-center mb-6">
-                            <div className="md:w-1/3">
-                                <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="inline-full-name">
-                                    Token Selling Price
+                                    WETH Selling Price
                                 </label>
                             </div>
                             <div className="md:w-2/3">
