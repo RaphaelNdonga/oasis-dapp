@@ -13,7 +13,7 @@ export default function Get_Offer() {
     const [oasisContract, setOasisContract] = useState(null);
     const [buyingAmount, setBuyingAmount] = useState("");
     const [daiAddress, setDaiAddress] = useState("0x11fE4B6AE13d2a6055C8D9cF65c55bac32B5d844");
-    const [wethAddress, setWethAddress] = useState("0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6");
+    const [wethAddress, setWethAddress] = useState("0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984");
 
     async function approve(address, amount) {
         const erc20Contract = new web3.eth.Contract(ERC20ABI, address);
@@ -40,7 +40,7 @@ export default function Get_Offer() {
         console.log("worser offer: ", worserOffer);
 
 
-        await approve(bestOffer[1], ethers.utils.parseUnits(bestOffer[0]));
+        // await approve(bestOffer[1], ethers.utils.parseUnits(bestOffer[0]));
         await approve(bestOffer[3], ethers.utils.parseUnits(bestOffer[2]));
 
         await oasisContract.methods.buy(bestOfferId, ethers.utils.parseEther(buyingAmount)).send({ from: localStorage.getItem("metamask") });
