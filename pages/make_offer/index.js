@@ -55,7 +55,9 @@ export default function Make_Offer() {
             await approve(wethAddress, _sellingPrice);
             await approve(daiAddress, _buyingPrice);
             console.log(oasisContract);
-            await oasisContract.methods.offer(_sellingPrice, wethAddress, _buyingPrice, daiAddress).send({
+            const position = await oasisContract.methods.last_offer_id().call();
+            console.log("The position is: ", position);
+            await oasisContract.methods.offer(_sellingPrice, wethAddress, _buyingPrice, daiAddress, position).send({
                 from: localStorage.getItem("metamask")
             });
         } catch (error) {
