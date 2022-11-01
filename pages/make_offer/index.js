@@ -7,7 +7,6 @@ import ERC20ABI from "../blockchain/ERC20ABI.json";
 import Link from "next/link";
 
 export default function Make_Offer() {
-    const [buyingAddress, setBuyingAddress] = useState("");
     const [sellingAddress, setSellingAddress] = useState("");
     const [buyingPrice, setBuyingPrice] = useState("");
     const [sellingPrice, setSellingPrice] = useState("");
@@ -15,7 +14,6 @@ export default function Make_Offer() {
     const [oasisContract, setOasisContract] = useState(null);
     const homeRef = useRef(null);
     const [daiAddress, setDaiAddress] = useState("0x11fE4B6AE13d2a6055C8D9cF65c55bac32B5d844");
-    const [wethAddress, setWethAddress] = useState("0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984");
 
 
 
@@ -51,13 +49,13 @@ export default function Make_Offer() {
         try {
             const _sellingPrice = ethers.utils.parseEther(sellingPrice);
             const _buyingPrice = ethers.utils.parseEther(buyingPrice);
-            console.log(`Arguments: ${_sellingPrice} ${sellingAddress} ${_buyingPrice} ${buyingAddress}`);
-            await approve(wethAddress, _sellingPrice);
+            console.log(`Arguments: ${_sellingPrice} ${sellingAddress} ${_buyingPrice} ${daiAddress}`);
+            await approve(sellingAddress, _sellingPrice);
             await approve(daiAddress, _buyingPrice);
             console.log(oasisContract);
             const position = await oasisContract.methods.last_offer_id().call();
             console.log("The position is: ", position);
-            await oasisContract.methods.offer(_sellingPrice, wethAddress, _buyingPrice, daiAddress, position).send({
+            await oasisContract.methods.offer(_sellingPrice, sellingAddress, _buyingPrice, daiAddress, position).send({
                 from: localStorage.getItem("metamask")
             });
         } catch (error) {
@@ -104,7 +102,19 @@ export default function Make_Offer() {
                         <div className="md:flex md:items-center mb-6">
                             <div className="md:w-1/3">
                                 <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="inline-full-name">
-                                    WETH Selling Price
+                                    Token you want to Sell
+                                </label>
+                            </div>
+                            <div className="md:w-2/3">
+                                <input className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-full-name" type="text" placeholder="Enter address" onChange={(e) => {
+                                    setSellingAddress(e.target.value);
+                                }} />
+                            </div>
+                        </div>
+                        <div className="md:flex md:items-center mb-6">
+                            <div className="md:w-1/3">
+                                <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="inline-full-name">
+                                    Your selling Price
                                 </label>
                             </div>
                             <div className="md:w-2/3">
